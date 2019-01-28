@@ -1,0 +1,44 @@
+{% load static %}
+{% load opsrep_utils %}
+
+<script>
+let nodetool_status = JSON.parse('{{ nodetool_status | escapejs }}');
+</script>
+
+{% for status in nodetool_status|load_json %}
+  {% for key, value in status.items %}
+     <div class="card">
+	     <div class="card-header text-muted text-center text-uppercase font-weight-bold">{{ key }}</div>
+        <div class="card-body">
+	<table class="table table-responsive-sm table-striped">
+	    <thead>
+	    <tr>
+		<th>STATUS</th>
+		<th>ADDRESS</th>
+		<th>LOAD</th>
+		<th>TOKENS</th>
+		<th>OWNS</th>
+		<th>HOST ID</th>
+		<th>RACK</th>
+	    </tr>
+	    </thead>
+	    <tbody>
+		{% for stat in value %}
+		  {% for k, v in stat.items %}
+			    <tr>
+				<td>{{ v.status }}</td>
+				<td>{{ v.ip }}</td>
+				<td>{{ v.load }}</td>
+				<td>{{ v.tokens }}</td>
+				<td>{{ v.owns }}</td>
+				<td>{{ v.host_id }}</td>
+				<td>{{ v.rack }}</td>
+			    </tr>
+		  {% endfor %}
+		{% endfor %}
+	    </tbody>
+	    </table>
+	</div>
+     </div>
+  {% endfor %}
+{% endfor %}

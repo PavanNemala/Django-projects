@@ -1,0 +1,68 @@
+{% load static %}
+{% load opsrep_utils %}
+<style>
+.table td {
+  padding: 0.3rem;
+}
+</style>
+<script>
+let health_metrics = JSON.parse('{{ health_metrics | escapejs }}');
+</script>
+      <div class="row">
+      {% for item in health_metrics|load_json %}
+        {% for key, value in item.items %}
+	<div style="float:left; margin: 5px;">
+	<div class="card">
+	     <div class="card-header text-muted small text-center text-uppercase font-weight-bold">{{ key}}</div>
+              <div class="card-body">
+               <table class="table table-striped">
+               <thead>
+		       <tr>
+		       {% if key == "partner device count" or key == "alerts count" %}
+			       <th class="text-muted small font-weight-bold" >Name</th>
+			       <th class="text-muted small font-weight-bold" >Count</th>
+		       {% endif %}
+		       {% if key == "tickets count" or key == "devices in client" %}
+			       <th class="text-muted small font-weight-bold">Partner</th>
+			       <th class="text-muted small font-weight-bold">Client</th>
+			       <th class="text-muted small font-weight-bold">Count</th>
+		       {% endif %}
+		       {% if key == "new client addition" %}
+                               <th class="text-muted small font-weight-bold">ID</th>
+                               <th class="text-muted small font-weight-bold">Name</th>
+                               <th class="text-muted small font-weight-bold">Serviceprovider</th>
+			       <th class="text-muted small font-weight-bold">Partner</th>
+			       <th class="text-muted small font-weight-bold">Email</th>
+                       {% endif %}
+		       </tr>
+	       </thead>
+	       <tbody>
+	      {% for i in value %}
+		<tr>
+		       {% if key == "partner device count" or key == "alerts count" %}
+		       <td class="text-muted small" >{{ i.name }}</td>
+		       <td class="text-muted small" >{{ i.count }}</td>
+		       {% endif %}
+		       {% if key == "tickets count" or key == "devices in client" %}
+		       <td class="text-muted small">{{ i.partner }}</td>
+		       <td class="text-muted small">{{ i.client }}</td>
+		       <td class="text-muted small">{{ i.count }}</td>
+		       {% endif %}
+		       {% if key == "new client addition" %}
+		       <td class="text-muted small">{{ i.id }}</td>
+		       <td class="text-muted small">{{ i.name }}</td>
+		       <td class="text-muted small">{{ i.serviceprovider }}</td>
+		       <td class="text-muted small">{{ i.partner }}</td>
+		       <td class="text-muted small">{{ i.email}}</td>
+                       {% endif %}
+		</tr>
+              {% endfor %}
+	       </tbody>
+	       </table>
+	      </div>
+	      </div>
+	      </div>
+        {% endfor %}
+      {% endfor %}
+      </div>
+      
